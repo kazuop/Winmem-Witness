@@ -1,0 +1,21 @@
+[package]
+name = "winmem"
+version = "0.1.0"
+description = "Winmem audit anchor: post Merkle roots / snapshot hashes on-chain."
+edition = "2021"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "winmem"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = "0.30.1"

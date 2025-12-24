@@ -1,0 +1,16 @@
+[features]
+seeds = true
+skip-lint = false
+
+[programs.localnet]
+winmem = "WiNMmM9q9FJpQpQkX1oYxZyQpXnGx1rjQqQqQqQqQqQ" # placeholder, Anchor will overwrite on deploy
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "pnpm -s test"

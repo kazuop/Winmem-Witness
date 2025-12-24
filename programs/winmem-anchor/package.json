@@ -1,0 +1,15 @@
+{
+  "name": "winmem-anchor-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "anchor test"
+  },
+  "devDependencies": {
+    "@coral-xyz/anchor": "^0.30.1",
+    "chai": "^4.4.1",
+    "mocha": "^10.8.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}
