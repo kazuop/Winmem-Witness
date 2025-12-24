@@ -1,0 +1,42 @@
+name: Question
+description: Ask a question about using or deploying Winmem
+title: "[Question]: "
+labels: ["question"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please check the docs first. If your question is still unanswered, ask here.
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Topic
+      options:
+        - Deployment (Docker/K8s)
+        - Configuration
+        - API Usage
+        - Indexing / RPC
+        - Storage / Database
+        - LLM / Prompts
+        - Observability
+        - Security
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What do you need help with?
+      placeholder: "How do I..."
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Include relevant versions, config excerpts (without secrets), and environment details.
+      render: shell
+    validations:
+      required: false

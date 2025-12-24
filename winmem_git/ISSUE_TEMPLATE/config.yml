@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Winmem Documentation
+    url: https://github.com/your-org/winmem/tree/main/docs
+    about: Read the docs before opening an issue.
+  - name: Security Report
+    url: https://github.com/your-org/winmem/security/policy
+    about: Please report security vulnerabilities privately.

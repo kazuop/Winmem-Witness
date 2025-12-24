@@ -1,0 +1,123 @@
+name: E2E
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "20"
+  PNPM_VERSION: "9"
+  TURBO_TELEMETRY_DISABLED: "1"
+  CI: "true"
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: winmem
+          POSTGRES_PASSWORD: winmem
+          POSTGRES_DB: winmem
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U winmem -d winmem"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Resolve pnpm store path
+        id: pnpm-store
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm -C apps/web playwright install --with-deps
+        continue-on-error: true
+
+      - name: Migrate database
+        run: pnpm turbo run db:migrate --cache-dir=.turbo
+        env:
+          DATABASE_URL: postgresql://winmem:winmem@localhost:5432/winmem
+
+      - name: Build apps
+        run: pnpm turbo run build --cache-dir=.turbo
+
+      - name: Start services (API + Worker + Web)
+        run: |
+          pnpm -C apps/api start & echo $! > api.pid
+          pnpm -C apps/worker start & echo $! > worker.pid
+          pnpm -C apps/web start --port 3000 & echo $! > web.pid
+          sleep 10
+        env:
+          DATABASE_URL: postgresql://winmem:winmem@localhost:5432/winmem
+          REDIS_URL: redis://localhost:6379
+          WINMEM_RPC_URL: https://api.mainnet-beta.solana.com
+
+      - name: Run E2E tests
+        run: pnpm turbo run e2e --cache-dir=.turbo
+
+      - name: Upload E2E artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-artifacts
+          path: |
+            **/playwright-report/**
+            **/test-results/**
+            **/screenshots/**
+            **/videos/**
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Stop services
+        if: always()
+        run: |
+          kill $(cat api.pid) || true
+          kill $(cat worker.pid) || true
+          kill $(cat web.pid) || true

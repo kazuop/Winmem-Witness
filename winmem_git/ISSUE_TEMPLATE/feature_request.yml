@@ -1,0 +1,49 @@
+name: Feature Request
+description: Propose an enhancement for Winmem
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement.
+        Please describe the problem you want to solve and what a good solution looks like.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / Motivation
+      description: What problem are you trying to solve?
+      placeholder: "As a user/dev, I want..."
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Solution
+      description: Describe your proposed change.
+      placeholder: "I propose..."
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      placeholder: "Other approaches..."
+    validations:
+      required: false
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact / Scope
+      description: Who benefits and what parts of the system change?
+      placeholder: "Affected components: ..."
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I searched existing issues to avoid duplicates.
+          required: true
