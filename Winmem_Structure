@@ -1,0 +1,466 @@
+winmem/
+├─ README.md
+├─ LICENSE
+├─ SECURITY.md
+├─ PRIVACY.md
+├─ DISCLAIMER.md
+├─ CONTRIBUTING.md
+├─ CODE_OF_CONDUCT.md
+├─ CHANGELOG.md
+├─ ROADMAP.md
+├─ .gitignore
+├─ .gitattributes
+├─ .editorconfig
+├─ .env.example
+├─ .dockerignore
+├─ pnpm-workspace.yaml
+├─ package.json
+├─ turbo.json
+├─ tsconfig.base.json
+├─ biome.json
+├─ commitlint.config.cjs
+├─ lefthook.yml
+│
+├─ .github/
+│  ├─ workflows/
+│  │  ├─ ci.yml
+│  │  ├─ lint.yml
+│  │  ├─ test.yml
+│  │  ├─ e2e.yml
+│  │  ├─ release.yml
+│  │  ├─ docker-build.yml
+│  │  ├─ helm-release.yml
+│  │  ├─ security-scan.yml
+│  │  ├─ dependency-review.yml
+│  │  └─ codeql.yml
+│  ├─ ISSUE_TEMPLATE/
+│  └─ PULL_REQUEST_TEMPLATE.md
+│
+├─ docs/
+│  ├─ index.md
+│  ├─ overview.md
+│  ├─ architecture.md
+│  ├─ terminology.md
+│  ├─ security/
+│  │  ├─ threat-model.md
+│  │  ├─ permissions.md
+│  │  ├─ data-redaction.md
+│  │  └─ incident-response.md
+│  ├─ concepts/
+│  │  ├─ legacy-runtime.md
+│  │  ├─ witness-logs.md
+│  │  ├─ memory-model.md
+│  │  ├─ audit-proofs.md
+│  │  ├─ archive-mode.md
+│  │  ├─ retention-policy.md
+│  │  └─ multi-tenancy.md
+│  ├─ api/
+│  │  ├─ openapi.yaml
+│  │  ├─ auth.md
+│  │  ├─ pagination.md
+│  │  └─ webhooks.md
+│  ├─ cli/
+│  │  ├─ install.md
+│  │  ├─ commands.md
+│  │  ├─ config.md
+│  │  └─ examples.md
+│  ├─ deployment/
+│  │  ├─ quickstart-docker.md
+│  │  ├─ self-hosting.md
+│  │  ├─ kubernetes.md
+│  │  ├─ helm.md
+│  │  ├─ rpc-recommendations.md
+│  │  ├─ scaling.md
+│  │  └─ backups.md
+│  ├─ operations/
+│  │  ├─ observability.md
+│  │  ├─ runbooks.md
+│  │  ├─ disaster-recovery.md
+│  │  └─ data-migrations.md
+│  ├─ troubleshooting.md
+│  └─ faq.md
+│
+├─ infra/
+│  ├─ docker/
+│  │  ├─ docker-compose.yml
+│  │  ├─ docker-compose.dev.yml
+│  │  ├─ docker-compose.prod.yml
+│  │  ├─ compose.override.example.yml
+│  │  ├─ postgres/
+│  │  │  ├─ init.sql
+│  │  │  └─ tuning.conf
+│  │  ├─ redis/
+│  │  │  └─ redis.conf
+│  │  ├─ clickhouse/              # Optional: high-throughput event storage
+│  │  │  └─ init.sql
+│  │  ├─ grafana/
+│  │  │  ├─ dashboards/
+│  │  │  └─ provisioning/
+│  │  ├─ prometheus/
+│  │  │  └─ prometheus.yml
+│  │  ├─ loki/
+│  │  └─ tempo/
+│  ├─ k8s/
+│  │  ├─ base/
+│  │  │  ├─ namespace.yaml
+│  │  │  ├─ api-deploy.yaml
+│  │  │  ├─ worker-deploy.yaml
+│  │  │  ├─ web-deploy.yaml
+│  │  │  ├─ ingress.yaml
+│  │  │  ├─ hpa.yaml
+│  │  │  └─ configmaps-secrets.example.yaml
+│  │  └─ overlays/
+│  │     ├─ dev/
+│  │     └─ prod/
+│  ├─ helm/
+│  │  ├─ winmem/
+│  │  │  ├─ Chart.yaml
+│  │  │  ├─ values.yaml
+│  │  │  ├─ values.dev.yaml
+│  │  │  ├─ values.prod.yaml
+│  │  │  └─ templates/
+│  │  └─ README.md
+│  ├─ terraform/
+│  │  ├─ aws/
+│  │  ├─ gcp/
+│  │  └─ modules/
+│  └─ scripts/
+│     ├─ dev-up.sh
+│     ├─ dev-down.sh
+│     ├─ seed-demo.sh
+│     ├─ backup-db.sh
+│     ├─ restore-db.sh
+│     ├─ rotate-keys.sh
+│     └─ smoke-test.sh
+│
+├─ apps/
+│  ├─ api/
+│  │  ├─ README.md
+│  │  ├─ package.json
+│  │  ├─ prisma/                   # Can be merged with packages/storage or referenced
+│  │  ├─ src/
+│  │  │  ├─ main.ts
+│  │  │  ├─ server.ts
+│  │  │  ├─ routes/
+│  │  │  │  ├─ health.ts
+│  │  │  │  ├─ auth.ts
+│  │  │  │  ├─ projects.ts
+│  │  │  │  ├─ sources.ts          # RPC / indexing sources
+│  │  │  │  ├─ events.ts
+│  │  │  │  ├─ memories.ts
+│  │  │  │  ├─ logs.ts
+│  │  │  │  ├─ audits.ts
+│  │  │  │  ├─ archives.ts
+│  │  │  │  ├─ exports.ts
+│  │  │  │  ├─ webhooks.ts
+│  │  │  │  └─ admin.ts
+│  │  │  ├─ controllers/
+│  │  │  ├─ middleware/
+│  │  │  │  ├─ auth.ts
+│  │  │  │  ├─ rbac.ts
+│  │  │  │  ├─ rateLimit.ts
+│  │  │  │  ├─ validation.ts
+│  │  │  │  ├─ requestId.ts
+│  │  │  │  └─ errorHandler.ts
+│  │  │  ├─ services/
+│  │  │  │  ├─ project.service.ts
+│  │  │  │  ├─ source.service.ts
+│  │  │  │  ├─ event.service.ts
+│  │  │  │  ├─ memory.service.ts
+│  │  │  │  ├─ audit.service.ts
+│  │  │  │  ├─ archive.service.ts
+│  │  │  │  ├─ export.service.ts
+│  │  │  │  └─ webhook.service.ts
+│  │  │  ├─ adapters/
+│  │  │  │  ├─ solana.adapter.ts
+│  │  │  │  ├─ queue.adapter.ts
+│  │  │  │  ├─ storage.adapter.ts
+│  │  │  │  ├─ blob.adapter.ts
+│  │  │  │  └─ llm.adapter.ts
+│  │  │  ├─ config/
+│  │  │  ├─ telemetry/
+│  │  │  └─ utils/
+│  │  └─ test/
+│  │     ├─ unit/
+│  │     └─ integration/
+│  │
+│  ├─ worker/
+│  │  ├─ README.md
+│  │  ├─ package.json
+│  │  ├─ src/
+│  │  │  ├─ main.ts
+│  │  │  ├─ scheduler/             # cron / interval scheduling
+│  │  │  ├─ jobs/
+│  │  │  │  ├─ ingest-signatures.job.ts
+│  │  │  │  ├─ fetch-transactions.job.ts
+│  │  │  │  ├─ normalize-events.job.ts
+│  │  │  │  ├─ detect-lifecycle.job.ts
+│  │  │  │  ├─ summarize-witness.job.ts
+│  │  │  │  ├─ build-merkle.job.ts
+│  │  │  │  ├─ anchor-onchain.job.ts   # Optional: anchor Merkle root/snapshot hash on-chain
+│  │  │  │  ├─ archive-freeze.job.ts
+│  │  │  │  └─ export-snapshot.job.ts
+│  │  │  ├─ pipelines/
+│  │  │  │  ├─ ingestion.pipeline.ts
+│  │  │  │  ├─ normalization.pipeline.ts
+│  │  │  │  ├─ memory.pipeline.ts
+│  │  │  │  ├─ audit.pipeline.ts
+│  │  │  │  └─ archive.pipeline.ts
+│  │  │  ├─ queues/
+│  │  │  ├─ config/
+│  │  │  ├─ telemetry/
+│  │  │  └─ utils/
+│  │  └─ test/
+│  │     ├─ unit/
+│  │     └─ integration/
+│  │
+│  ├─ indexer/                      # Optional: dedicated high-throughput indexer
+│  │  ├─ README.md
+│  │  ├─ package.json
+│  │  └─ src/
+│  │     ├─ main.ts
+│  │     ├─ streams/
+│  │     ├─ backfill/
+│  │     ├─ checkpoints/
+│  │     └─ rpc-pool/
+│  │
+│  ├─ web/
+│  │  ├─ README.md
+│  │  ├─ package.json
+│  │  ├─ next.config.js
+│  │  ├─ public/
+│  │  └─ src/
+│  │     ├─ app/
+│  │     ├─ components/
+│  │     ├─ features/
+│  │     │  ├─ projects/
+│  │     │  ├─ logs/
+│  │     │  ├─ audits/
+│  │  │     ├─ archives/
+│  │     │  └─ settings/
+│  │     ├─ lib/
+│  │     ├─ styles/
+│  │     └─ win-ui/                 # Retro Windows-style UI components
+│  │
+│  └─ docs-site/
+│     ├─ README.md
+│     └─ (Docusaurus/NextDocs)
+│
+├─ packages/
+│  ├─ cli/
+│  │  ├─ README.md
+│  │  ├─ package.json
+│  │  ├─ src/
+│  │  │  ├─ index.ts
+│  │  │  ├─ commands/
+│  │  │  │  ├─ init.ts
+│  │  │  │  ├─ deploy.ts
+│  │  │  │  ├─ up.ts
+│  │  │  │  ├─ down.ts
+│  │  │  │  ├─ add-project.ts
+│  │  │  │  ├─ remove-project.ts
+│  │  │  │  ├─ status.ts
+│  │  │  │  ├─ logs.ts
+│  │  │  │  ├─ audit.ts
+│  │  │  │  ├─ export.ts
+│  │  │  │  ├─ backup.ts
+│  │  │  │  └─ doctor.ts
+│  │  │  ├─ lib/
+│  │  │  │  ├─ config.ts
+│  │  │  │  ├─ fs.ts
+│  │  │  │  ├─ docker.ts
+│  │  │  │  ├─ k8s.ts
+│  │  │  │  ├─ helm.ts
+│  │  │  │  ├─ api.ts
+│  │  │  │  └─ prompts.ts
+│  │  │  ├─ templates/
+│  │  │  │  ├─ docker-compose.yml
+│  │  │  │  ├─ .env.example
+│  │  │  │  ├─ winmem.yaml
+│  │  │  │  └─ projects/
+│  │  │  │     ├─ program.yaml
+│  │  │  │     ├─ token.yaml
+│  │  │  │     └─ nft.yaml
+│  │  │  └─ telemetry/
+│  │  └─ test/
+│  │
+│  ├─ sdk-js/
+│  │  ├─ README.md
+│  │  ├─ package.json
+│  │  └─ src/
+│  │     ├─ client.ts
+│  │     ├─ types.ts
+│  │     └─ helpers.ts
+│  │
+│  ├─ sdk-rust/                      # Optional: Rust SDK
+│  │  ├─ Cargo.toml
+│  │  └─ src/
+│  │
+│  ├─ core/
+│  │  ├─ package.json
+│  │  └─ src/
+│  │     ├─ domain/
+│  │     │  ├─ project.ts
+│  │     │  ├─ source.ts
+│  │     │  ├─ event.ts
+│  │     │  ├─ memory.ts
+│  │     │  ├─ audit.ts
+│  │     │  ├─ archive.ts
+│  │     │  └─ lifecycle.ts
+│  │     ├─ engines/
+│  │     │  ├─ ingestion.engine.ts
+│  │     │  ├─ normalization.engine.ts
+│  │     │  ├─ witness.engine.ts
+│  │     │  ├─ memory.engine.ts
+│  │     │  ├─ audit.engine.ts
+│  │     │  └─ archive.engine.ts
+│  │     ├─ policies/
+│  │     │  ├─ retention.policy.ts
+│  │     │  ├─ sampling.policy.ts
+│  │     │  ├─ redaction.policy.ts
+│  │     │  ├─ lifecycle.policy.ts
+│  │     │  └─ rate-limit.policy.ts
+│  │     ├─ schemas/
+│  │     │  ├─ winmem.yaml.schema.json
+│  │     │  ├─ project.schema.json
+│  │     │  └─ event.schema.json
+│  │     └─ utils/
+│  │
+│  ├─ solana/
+│  │  ├─ package.json
+│  │  └─ src/
+│  │     ├─ rpc/
+│  │     ├─ rpc-pool/
+│  │     ├─ parsers/
+│  │     │  ├─ system.parser.ts
+│  │     │  ├─ spl-token.parser.ts
+│  │     │  ├─ token-2022.parser.ts
+│  │     │  ├─ metaplex.parser.ts
+│  │     │  ├─ memo.parser.ts
+│  │     │  └─ program-generic.parser.ts
+│  │     ├─ indexing/
+│  │     │  ├─ signature-stream.ts
+│  │     │  ├─ tx-fetcher.ts
+│  │     │  ├─ backfill.ts
+│  │     │  └─ checkpoint.ts
+│  │     ├─ types/
+│  │     └─ helpers/
+│  │
+│  ├─ storage/
+│  │  ├─ package.json
+│  │  ├─ prisma/
+│  │  │  ├─ schema.prisma
+│  │  │  └─ migrations/
+│  │  └─ src/
+│  │     ├─ db.ts
+│  │     ├─ repositories/
+│  │     ├─ blob/
+│  │     │  ├─ s3.ts
+│  │     │  └─ filesystem.ts
+│  │     ├─ cache/
+│  │     │  └─ redis.ts
+│  │     └─ locks/
+│  │        └─ distributed-lock.ts
+│  │
+│  ├─ cryptography/
+│  │  ├─ package.json
+│  │  └─ src/
+│  │     ├─ hash.ts               # canonical hashing
+│  │     ├─ merkle.ts             # merkle tree builder
+│  │     ├─ signatures.ts         # optional signing keys
+│  │     └─ canonical-json.ts     # stable serialization
+│  │
+│  ├─ llm/
+│  │  ├─ package.json
+│  │  └─ src/
+│  │     ├─ providers/
+│  │     │  ├─ openai.ts
+│  │     │  ├─ anthropic.ts
+│  │     │  └─ local.ts
+│  │     ├─ prompts/
+│  │     │  ├─ witness-summary.prompt.md
+│  │     │  ├─ memory-compress.prompt.md
+│  │     │  ├─ lifecycle-detect.prompt.md
+│  │     │  └─ archive-epitaph.prompt.md
+│  │     ├─ guardrails/
+│  │     └─ types.ts
+│  │
+│  ├─ observability/
+│  │  ├─ package.json
+│  │  └─ src/
+│  │     ├─ logger.ts
+│  │     ├─ metrics.ts
+│  │     ├─ tracing.ts
+│  │     ├─ health.ts
+│  │     └─ redaction.ts
+│  │
+│  └─ ui-kit/
+│     ├─ package.json
+│     └─ src/
+│
+├─ programs/                        # Optional: Solana on-chain program
+│  ├─ winmem-anchor/                # Anchor workspace
+│  │  ├─ Anchor.toml
+│  │  ├─ Cargo.toml
+│  │  ├─ programs/
+│  │  │  └─ winmem/
+│  │  │     ├─ Cargo.toml
+│  │  │     └─ src/
+│  │  │        ├─ lib.rs
+│  │  │        ├─ state.rs          # accounts: Project, Root, Authority
+│  │  │        └─ instructions/
+│  │  │           ├─ init_project.rs
+│  │  │           ├─ post_root.rs   # post merkle root / snapshot hash
+│  │  │           └─ rotate_auth.rs
+│  │  ├─ tests/
+│  │  └─ migrations/
+│  └─ README.md
+│
+├─ examples/
+│  ├─ configs/
+│  │  ├─ winmem.yaml
+│  │  ├─ projects/
+│  │  │  ├─ token-project.yaml
+│  │  │  ├─ nft-project.yaml
+│  │  │  ├─ program-project.yaml
+│  │  │  └─ multisource-project.yaml
+│  │  └─ policies/
+│  │     ├─ retention.default.yaml
+│  │     ├─ redaction.default.yaml
+│  │     └─ sampling.default.yaml
+│  ├─ deployments/
+│  │  ├─ docker/
+│  │  ├─ k8s/
+│  │  └─ helm/
+│  ├─ dashboards/
+│  │  └─ grafana.json
+│  └─ integrations/
+│     ├─ webhook-example.ts
+│     ├─ exporter-example.ts
+│     └─ alert-rules.yaml
+│
+├─ test/
+│  ├─ fixtures/
+│  │  ├─ tx/
+│  │  ├─ events/
+│  │  └─ projects/
+│  ├─ e2e/
+│  │  ├─ docker.e2e.spec.ts
+│  │  └─ api.e2e.spec.ts
+│  ├─ load/
+│  │  ├─ k6/
+│  │  └─ scenarios/
+│  └─ regression/
+│     ├─ golden-events/
+│     └─ golden-memories/
+│
+└─ scripts/
+   ├─ bootstrap.sh
+   ├─ lint.sh
+   ├─ test.sh
+   ├─ build.sh
+   ├─ release.sh
+   ├─ generate-openapi.sh
+   ├─ generate-types.sh
+   ├─ db-migrate.sh
+   └─ db-reset.sh
