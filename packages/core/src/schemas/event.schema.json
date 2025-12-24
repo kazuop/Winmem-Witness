@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Event",
+  "type": "object",
+  "properties": {
+    "signature": {
+      "type": "string"
+    },
+    "slot": {
+      "type": "integer"
+    },
+    "type": {
+      "type": "string"
+    },
+    "data": {}
+  },
+  "required": [
+    "signature",
+    "slot",
+    "type",
+    "data"
+  ]
+}

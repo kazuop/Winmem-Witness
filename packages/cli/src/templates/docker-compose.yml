@@ -1,0 +1,71 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: winmem
+      POSTGRES_PASSWORD: winmem
+      POSTGRES_DB: winmem
+    ports:
+      - "5432:5432"
+    volumes:
+      - winmem_pg:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  api:
+    image: winmem/api:local
+    environment:
+      PORT: 8787
+      WINMEM_LOG_LEVEL: info
+      WINMEM_PUBLIC_MODE: "false"
+      WINMEM_CORS_ORIGINS: "http://localhost:3000"
+      WINMEM_RATE_LIMIT_RPM: 600
+      WINMEM_API_KEY_ADMIN: "dev_admin_key_change_me"
+      WINMEM_API_KEY_READONLY: "dev_readonly_key_change_me"
+      DATABASE_URL: postgresql://winmem:winmem@postgres:5432/winmem
+      REDIS_URL: redis://redis:6379
+      WINMEM_RPC_URL: https://api.mainnet-beta.solana.com
+      WINMEM_RPC_TIMEOUT_MS: 20000
+      WINMEM_RPC_RETRIES: 5
+      WINMEM_REDACTION_ENABLED: "true"
+    ports:
+      - "8787:8787"
+    depends_on:
+      - postgres
+      - redis
+
+  worker:
+    image: winmem/worker:local
+    environment:
+      WINMEM_LOG_LEVEL: info
+      DATABASE_URL: postgresql://winmem:winmem@postgres:5432/winmem
+      REDIS_URL: redis://redis:6379
+      WINMEM_QUEUE_PREFIX: winmem
+      WINMEM_RPC_URL: https://api.mainnet-beta.solana.com
+      WINMEM_RPC_TIMEOUT_MS: 20000
+      WINMEM_WORKER_CONCURRENCY: 8
+      WINMEM_INGEST_LIMIT: 100
+      WINMEM_WITNESS_CADENCE_SECONDS: 3600
+      WINMEM_EXPORT_DIR: /exports
+    volumes:
+      - winmem_exports:/exports
+    depends_on:
+      - postgres
+      - redis
+
+  web:
+    image: winmem/web:local
+    environment:
+      NEXT_PUBLIC_WINMEM_API_URL: http://localhost:8787
+      NEXT_PUBLIC_WINMEM_BRAND: Winmem
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+volumes:
+  winmem_pg:
+  winmem_exports:

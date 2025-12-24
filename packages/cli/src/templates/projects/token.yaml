@@ -1,0 +1,5 @@
+name: example-token
+cluster: mainnet-beta
+sources:
+  - kind: ADDRESS
+    value: ReplaceWithTokenMintOrOwnerAddress

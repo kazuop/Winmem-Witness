@@ -1,0 +1,5 @@
+name: example-nft
+cluster: mainnet-beta
+sources:
+  - kind: ADDRESS
+    value: ReplaceWithCollectionOrAuthorityAddress

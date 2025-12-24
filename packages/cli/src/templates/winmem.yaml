@@ -1,0 +1,5 @@
+version: "1"
+api:
+  url: "http://localhost:8787"
+  # apiKey: "set_via_env_or_cli"
+projects: []

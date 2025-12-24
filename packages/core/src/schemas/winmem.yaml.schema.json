@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "winmem.yaml",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "api": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "apiKey": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "url"
+      ]
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/project"
+      }
+    }
+  },
+  "required": [
+    "version",
+    "api"
+  ],
+  "definitions": {
+    "project": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "cluster": {
+          "type": "string",
+          "enum": [
+            "mainnet-beta",
+            "devnet",
+            "testnet"
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/source"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "cluster",
+        "sources"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "ADDRESS",
+            "PROGRAM",
+            "ACCOUNT_SNAPSHOT"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ]
+    }
+  }
+}

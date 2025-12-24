@@ -1,0 +1,5 @@
+name: example-program
+cluster: devnet
+sources:
+  - kind: PROGRAM
+    value: ReplaceWithProgramId
