@@ -1,0 +1,32 @@
+{
+  "name": "winmem",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "bootstrap": "./scripts/bootstrap.sh",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "test:e2e": "vitest -c test/vitest.config.ts --run test/e2e",
+    "build": "turbo build",
+    "dev:up": "bash infra/scripts/dev-up.sh",
+    "dev:down": "bash infra/scripts/dev-down.sh",
+    "format": "biome check . --write",
+    "typecheck": "turbo typecheck",
+    "generate:openapi": "./scripts/generate-openapi.sh",
+    "generate:types": "./scripts/generate-types.sh",
+    "db:migrate": "./scripts/db-migrate.sh",
+    "db:reset": "./scripts/db-reset.sh"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
+    "lefthook": "^1.7.15",
+    "turbo": "^2.2.3",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}
