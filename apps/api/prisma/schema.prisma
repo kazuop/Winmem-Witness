@@ -1,0 +1,178 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+
+enum ProjectStatus { ACTIVE LEGACY ARCHIVED }
+enum SourceKind { ADDRESS PROGRAM ACCOUNT_SNAPSHOT }
+enum MemoryKind { WITNESS_LOG SNAPSHOT LIFECYCLE NOTE }
+enum ExportStatus { PENDING READY FAILED }
+enum ArchiveStatus { PENDING READY FAILED }
+
+model Tenant {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  projects  Project[]
+  apiKeys   ApiKey[]
+}
+
+model ApiKey {
+  id        String   @id @default(cuid())
+  tenantId  String
+  name      String
+  role      String
+  keyHash   String
+  scopes    Json?
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  @@index([tenantId])
+  @@index([keyHash])
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  tenantId    String
+  name        String
+  description String?
+  cluster     String
+  status      ProjectStatus @default(ACTIVE)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  sources  Source[]
+  rawRefs  RawRef[]
+  events   Event[]
+  memories Memory[]
+  auditBatches AuditBatch[]
+  archives Archive[]
+  exports  Export[]
+  webhookSubs WebhookSubscription[]
+
+  @@index([tenantId])
+  @@unique([tenantId, name])
+}
+
+model Source {
+  id        String     @id @default(cuid())
+  projectId String
+  kind      SourceKind
+  value     String
+  createdAt DateTime   @default(now())
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@index([projectId])
+  @@unique([projectId, kind, value])
+}
+
+model RawRef {
+  id        String   @id @default(cuid())
+  projectId String
+  signature String
+  slot      BigInt
+  blockTime Int?
+  err       String?
+  rpcUrl    String?
+  createdAt DateTime @default(now())
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@index([projectId, slot])
+  @@unique([projectId, signature])
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  projectId String
+  signature String
+  slot      BigInt
+  blockTime Int?
+  type      String
+  data      Json
+  createdAt DateTime @default(now())
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@index([projectId, slot])
+  @@index([projectId, type])
+  @@index([signature])
+  @@unique([projectId, signature, type])
+}
+
+model Memory {
+  id          String    @id @default(cuid())
+  projectId   String
+  windowStart Int
+  windowEnd   Int
+  kind        MemoryKind
+  content     Json
+  leafHash    String?
+  batchId     String?
+  createdAt   DateTime  @default(now())
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@index([projectId, windowStart])
+  @@index([projectId, kind])
+  @@index([leafHash])
+}
+
+model AuditBatch {
+  id          String   @id @default(cuid())
+  projectId   String
+  windowStart Int
+  windowEnd   Int
+  hashAlg     String   @default("SHA256")
+  root        String
+  count       Int
+  manifest    Json
+  createdAt   DateTime @default(now())
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  auditItems AuditItem[]
+  @@index([projectId, windowEnd])
+  @@unique([projectId, windowStart, windowEnd])
+}
+
+model AuditItem {
+  id        String   @id @default(cuid())
+  batchId   String
+  kind      String
+  refId     String
+  leaf      String
+  path      Json
+  createdAt DateTime @default(now())
+  batch AuditBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  @@index([batchId])
+  @@index([leaf])
+  @@unique([batchId, kind, refId])
+}
+
+model Archive {
+  id           String        @id @default(cuid())
+  projectId    String
+  status       ArchiveStatus @default(PENDING)
+  manifestHash String?
+  notes        String?
+  createdAt    DateTime      @default(now())
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@index([projectId])
+}
+
+model Export {
+  id        String       @id @default(cuid())
+  projectId String
+  status    ExportStatus @default(PENDING)
+  url       String?
+  checksum  String?
+  meta      Json?
+  createdAt DateTime     @default(now())
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@index([projectId])
+}
+
+model WebhookSubscription {
+  id        String   @id @default(cuid())
+  projectId String
+  url       String
+  secret    String
+  events    String
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@index([projectId])
+}
